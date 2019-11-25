@@ -11,8 +11,8 @@ if currentBranch=$(git symbolic-ref --short -q HEAD)
 then
     git stash
     git checkout "$targetBranch"
-    git pull --no-edit upstream "$sourceBranch"
-    git push upstream $targetBranch
+    git pull --no-edit origin "$sourceBranch"
+    git push origin "$targetBranch"
     git checkout "$currentBranch"
     git stash apply
 
