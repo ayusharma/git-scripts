@@ -3,10 +3,14 @@
 targetBranch=$1
 test -z "$targetBranch" && echo "ERROR: Please provide the target branch name to update" 1>&2 && exit 1
 
-sourceBranch=$2
-test -z "$sourceBranch" && echo "ERROR: Please provide the source branch name to update" 1>&2 && exit 1
+sourceBranch=${2:-'master-nsi'}
 
-# Find which is your current branch
+if [[ ! `git branch --list $targetBranch` ]]
+then
+    echo "'$targetBranch' branch does not exist in local repository"
+    exit 1
+fi
+
 if currentBranch=$(git symbolic-ref --short -q HEAD)
 then
     git stash
@@ -14,10 +18,12 @@ then
     git pull --no-edit origin "$sourceBranch"
     git push origin "$targetBranch"
     git checkout "$currentBranch"
-    git stash apply
+    git stash pop
 
     echo "Updated the $targetBranch with changes from master-nsi"
+    exit 0
 else
     echo ERROR: Cannot find the current branch!
+    exit 2
 fi
 
