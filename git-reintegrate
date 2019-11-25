@@ -4,22 +4,41 @@ targetBranch=$1
 test -z "$targetBranch" && echo "ERROR: Please provide the target branch name to update" 1>&2 && exit 1
 
 sourceBranch=${2:-'master-nsi'}
+currentBranch=$(git symbolic-ref --short -q HEAD)
+
 
 if [[ ! `git branch --list $targetBranch` ]]
 then
-    echo "'$targetBranch' branch does not exist in local repository"
+    echo ""
+    echo "ERROR: $targetBranch branch does not exist in local repository"
+    echo ""
     exit 1
 fi
 
-if currentBranch=$(git symbolic-ref --short -q HEAD)
-then
-    git stash
-    git checkout "$targetBranch"
-    git pull --no-edit origin "$sourceBranch"
-    git push origin "$targetBranch"
-    git checkout "$currentBranch"
-    git stash pop
+function main() {
+      git checkout "$targetBranch"
+      echo ""
+      git pull --no-edit origin "$sourceBranch"
+      echo ""
+      git push origin "$targetBranch"
+      echo ""
+      git checkout "$currentBranch"
+}
 
+if [[ $currentBranch ]]; then
+    echo ""
+
+    if [[ `git status --porcelain` ]]; then
+      git stash
+      echo ""
+      main
+      echo ""
+      git stash pop
+    else
+      main
+    fi
+
+    echo ""
     echo "Updated the $targetBranch with changes from master-nsi"
     exit 0
 else

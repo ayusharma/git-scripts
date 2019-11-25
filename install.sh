@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 installationDir="${HOME}/.git-scripts"
 
 if [ -d "$installationDir" ]; then rm -Rf $installationDir; fi

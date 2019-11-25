@@ -2,10 +2,15 @@
 
 This repository contains useful git automation scripts for custom use.
 
+## Installation
+
+```shell script
+curl -o- https://raw.githubusercontent.com/ayusharma/git-scripts/master/install.sh | bash
+```
 
 ## 1. `git reintegrate`
 
-```sh
+```shell script
     git reintegrate <target branch you want to update> <source branch for new changes>
 ```
 
