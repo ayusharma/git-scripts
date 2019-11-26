@@ -12,13 +12,11 @@ curl -o- https://raw.githubusercontent.com/ayusharma/git-scripts/master/install.
 #### 1. `git reintegrate`
 
 ```shell script
-    git reintegrate <target branch you want to update> <source branch for new changes>
+    git reintegrate <REMOTE> <BRANCH_TO_UPDATE> <BRANCH_FOR_UPDATE>
 ```
 
-Note: This uses **master-nsi** as an optional argument.
-
-so, following command will update target branch with **master-nsi**
+Note: This script uses **master-nsi** as an optional argument. so, following command will update BRANCH_TO_UPDATE branch with **master-nsi** (BRANCH_FOR_UPDATE)
 
 ```
-    git reintegrate <target branch you want to update>
+    git reintegrate origin <target branch you want to update>
 ```

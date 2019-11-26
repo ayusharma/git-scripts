@@ -1,18 +1,19 @@
-#!/bin/sh
+#!/bin/bash
 
-targetBranch=$1
-test -z "$targetBranch" && echo "ERROR: Please provide the target branch name to update" 1>&2 && exit 1
+remote=$1
+test -z "$remote" && echo "ERROR: Please provide the git remote. eg. git reintegrate origin <branch name>" 1>&2 && exit 1
 
-sourceBranch=${2:-'master-nsi'}
+targetBranch=$2
+test -z "$targetBranch" && echo "ERROR: Please provide the brnach name. eg. git reintegrate origin <branch name>" 1>&2 && exit 1
+
+sourceBranch=${3:-'master-nsi'}
 currentBranch=$(git symbolic-ref --short -q HEAD)
 
-
-if [[ ! `git branch --list $targetBranch` ]]
-then
+git ls-remote --exit-code "$remote"
+if test $? != 0; then
     echo ""
-    echo "ERROR: $targetBranch branch does not exist in local repository"
-    echo ""
-    exit 1
+    echo "ERROR: git remote not found."
+    exit 3;
 fi
 
 function main() {
@@ -25,10 +26,18 @@ function main() {
       git checkout "$currentBranch"
 }
 
+if [[ ! $(git branch --list $targetBranch) ]]
+then
+    echo ""
+    echo "ERROR: branch \"$targetBranch\" does not exist in local repository"
+    echo ""
+    exit 1
+fi
+
 if [[ $currentBranch ]]; then
     echo ""
 
-    if [[ `git status --porcelain` ]]; then
+    if [[ $(git status --porcelain) ]]; then
       git stash
       echo ""
       main
@@ -39,7 +48,7 @@ if [[ $currentBranch ]]; then
     fi
 
     echo ""
-    echo "Updated the $targetBranch with changes from master-nsi"
+    echo "Updated the \"$targetBranch\" branch with changes from \"$sourceBranch\""
     exit 0
 else
     echo ERROR: Cannot find the current branch!
