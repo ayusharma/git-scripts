@@ -9,8 +9,8 @@ test -z "$targetBranch" && echo "ERROR: Please provide the brnach name. eg. git 
 sourceBranch=${3:-'master-nsi'}
 currentBranch=$(git symbolic-ref --short -q HEAD)
 
-git ls-remote --exit-code "$remote"
-if test $? != 0; then
+git ls-remote --exit-code "$remote" &> /dev/null
+if test $? == 2; then
     echo ""
     echo "ERROR: git remote not found."
     exit 3;
