@@ -19,9 +19,9 @@ fi
 function main() {
       git checkout "$targetBranch"
       echo ""
-      git pull --no-edit origin "$sourceBranch"
+      git pull --no-edit "$remote" "$sourceBranch"
       echo ""
-      git push origin "$targetBranch"
+      git push "$remote" "$targetBranch"
       echo ""
       git checkout "$currentBranch"
 }
